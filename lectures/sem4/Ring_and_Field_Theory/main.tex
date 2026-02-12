@@ -1,0 +1,137 @@
+
+\hypertarget{lecture1}{}
+
+\section{Вступление}
+
+\begin{definition}
+    \(K\) --- кольцо, если на нем определены две операции \(+, \cdot\) и 
+    \begin{enumerate}
+        \item \((K, +)\) --- абелева группа
+        \item Дистрибутивность: \(a(b + c) = ab + ac, (b + c)a = ba + ca\)
+    \end{enumerate}
+\end{definition}
+
+В нашем курсе все кольца будут сразу обладать еще двумя свойствами:
+
+\begin{enumerate}
+    \setcounter{enumi}{2}
+    \item Ассоциативность: \((ab)c = a(bc)\)
+    \item Существование единицы: \(\exists 1: 1 \cdot a = a \cdot 1 = a\)s
+\end{enumerate}
+
+Таким образом, под \textit{коммутативное кольцо} мы будем понимать кольцо, удовлетворяющее свойствам 1-4, которое является коммутативным (т.е. \(ab = ba\))
+
+\subsection{Примеры колец}
+\begin{enumerate}
+    \item \(\Z\)
+    \item \(\mathbb{F}[x_1, \dots x_n]\)
+    \item \(\Z_m = \Z/m\Z\)
+    \item \(\mathbb{F}\) --- поле
+\end{enumerate}
+
+\begin{definition}
+    Пусть \(K, L\) --- кольца, \(K \subset L, u \in L\). Тогда:
+    \[K[u] = {f(u) | f \in K[x]} = \text{минимальное подкольцо, содержащее \(K \cup \{u\}\)}\]
+\end{definition}
+
+Попробуем решить Великую Теорему Ферма: \(x^n + y^n = z^n\). Заметим, что достаточно доказать ее для случая \(n = p, 4\), где \(p\) --- простое. Пусть \(\xi_p\) --- примитивный корень \(p\)-ой степени из 1 в \(\Cm\). Тогда:
+\[x^p + y^p = (x + y)(x + \xi_py)\dots((x + \xi_p^{p - 1}y)) = z^p\]
+Приходим к тому, что если рассмотреть кольцо \(\Z[\xi_p]\) и доказать, что в нем работает ОТА (основная теорема арифметики), то тогда получится как-то получить противоречие, используя единственность разложение. Случай \(p = 3\) будет доказан далее.
+
+К сожалению, ОТА есть не не во всех \(\Z[\xi_p]\), а только для \(p < 23\). Для ''регулярных'' \(p\) есть некий аналог ОТА, но, к сожалению, регулярных простых чисел на данный момент около 61\% против 39\% нерегулярных. В общем, надо придумывать что-то другое.
+
+\subsection{Гауссовы целые числа}
+\begin{example}
+    \(\Z[\xi_4] = \Z[i] = \{a + bi, a, b \in \Z\}\)
+\end{example}
+
+\begin{example}[Числа Эйзенштейна]
+    \(\Z[\xi_3] = \Z[w] = \{a + bw, a, b \in \Z\}\), где \(w\) --- нетривиальный корень \(x^3 - 1\).
+\end{example}
+
+\subsection{Делимость}
+\begin{definition}
+    Пусть \(K\) --- коммутативное кольцо. Будем говорить, что \(a \vdots b\) или \(b | a\), если \(\exists c \in K: a = bc\)
+\end{definition}
+
+\begin{note}
+    \(a \vdots a\), \(a \vdots b, b \vdots c \Ra a \vdots c\).
+\end{note}
+
+\begin{definition}
+    \(a \in K\) --- делитель нуля, если \(a \ne 0, \exists b \ne 0 \in K: ab = 0\).
+\end{definition}
+
+\begin{note}
+    в \(\Z_m\) для любого составного \(m\) есть делители нуля.
+\end{note}
+
+\begin{definition}
+    \(K\) --- область целостности (целостное кольцо), если \(K\) --- коммутативное кольцо без делителей нуля.
+\end{definition}
+
+Далее считаем, что кольца --- это области целостности
+
+\begin{proposition}
+    Пусть \(K\) --- область целостности, \(c \ne 0\). Тогда \(ac = bc \Lra a = b\)
+\end{proposition}
+\begin{proposition}
+    \[ac = bc \Lra (a - b)c = 0 \Lra a - b = 0 \Lra a = b\]
+\end{proposition}
+
+\begin{definition}
+    Пусть \(K\) --- область целостности. \(K^* = \{a \in K | \exists b \in K: ab = ba = 1\}\).
+\end{definition}
+
+\begin{note}
+    \(K^*\) образует группу обратимых по умножению элементов
+\end{note}
+
+Таким образом, можно рассмотреть действие группы \(K^*\) на множестве \(K\).
+\begin{definition}
+    Орбиты данного действия называются классами ассоциированности. Соответственно, пишем \(a \sim b\), если \(\exists r \in K^*: a = rb\)
+\end{definition}
+
+\begin{note}
+    \(\sim\) --- отношение эквивалентности, это нам известно из курса теории групп.
+\end{note}
+
+\begin{proposition}
+    Следующие условия эквивалентны:
+    \begin{enumerate}
+        \item \(a \sim b\)
+        \item \(a \vdots b, b \vdots a\)
+        \item \(\{c \in K: c \vdots a\} = \{c \in K: c \vdots b\}\)
+    \end{enumerate}
+\end{proposition}
+\begin{proof}\indent
+    \begin{enumerate}
+        \item[\(1 \Ra 2\)] \(a \sim b \Ra a = br \Ra b = ar^{-1} \Ra a \vdots b, b \vdots a\)
+        \item[\(2 \Ra 1\)] \(a \vdots b, b \vdots a \Ra a = cb, b = da \Ra a = cda \Ra 1 = cd\), т.е. \(c, d \in K^* \Ra a \sim b\).
+        \item[\(2 \Lra 3\)] \(a \vdots b \Lra \{c \in K: c \vdots a\} \subset \{c \in K: c \vdots b\}\).
+        \(b \vdots a \Lra \{c \in K: c \vdots a\} \supset \{c \in K: c \vdots b\}\)
+    \end{enumerate}
+\end{proof}
+
+\begin{definition}
+    Пусть \(K\) --- область целостности. \(x \in K\) называется неразложимым, если \(x \notin K^* \cup \{0\}\) и из \(x = ab \Ra a \in K^*\) или \(b \in K^*\).
+\end{definition}
+
+\begin{definition}
+    Область целостности \(K\) называется факториальным кольцом, если в нем выполнены два свойства:
+    \begin{enumerate}
+        \item \textbf{Существование:} \(\forall a \in K, a \ne 0\) представляется в виде \(a = up_1, \dots p_s\), где \(u \in K^*, p_1, \dots p_s\) --- неразложимые
+        \item \textbf{Единственность:} Пусть \(a = up_1\dots p_s = wq_1\dots q_l\). Тогда \(s = l\) и \(\exists\) перенумерация, такая, что \(p_i \sim q_i\).
+    \end{enumerate}
+\end{definition}
+
+\begin{note}
+    \(\text{Кольца} \supset \text{Области целостности} \supset \text{Факториальные кольца} \supset \text{Поля}\)
+\end{note}
+
+\begin{example}[Не факториальное кольцо]
+    \(\Z[2i]\) не является факториальным. Действительно:
+    \[4 = 2 \cdot 2 = 2i \cdot (-2i)\]
+    Но \(2 \not\sim 2i, 2 \not\sim -2i\), т.к. \(\Z[2i]^* = \{\pm 1\}\).
+\end{example}
+
