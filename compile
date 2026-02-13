@@ -160,6 +160,19 @@ def safe_copy_file(src: Path, dst: Path) -> None:
         raise RuntimeError(f"Failed to copy {src} to {dst}: {e}")
 
 
+def get_project_root() -> Path:
+    """
+    Return the directory containing this script, and verify that it contains
+    the required subdirectories 'preamble' and 'lectures'.
+    """
+    script_dir = Path(__file__).parent.resolve()
+    if not (script_dir / "preamble").is_dir():
+        raise RuntimeError(f"Preamble folder not found in {script_dir}")
+    if not (script_dir / "lectures").is_dir():
+        raise RuntimeError(f"Lectures folder not found in {script_dir}")
+    return script_dir
+
+
 def prepare_compilation_directory(
     temp_dir: Path, project_root: Path, src_dir: Path
 ) -> None:
@@ -270,7 +283,8 @@ def main() -> None:
     )
     parser.add_argument(
         "source_dir",
-        help="Full relative path to the lecture folder from project root, e.g. 'lectures/sem1/MathLog'",
+        help="Path to the lecture folder (relative to current directory or absolute). "
+             "Example: 'lectures/sem1/MathLog' or simply 'MathLog' if already inside lectures/sem1/",
     )
     parser.add_argument(
         "--result-dir",
@@ -297,15 +311,25 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    # ----- Determine project root (directory containing this script) -----
-    project_root = Path(__file__).parent.resolve()
+    # ----- Determine project root (directory where this script resides) -----
+    try:
+        project_root = get_project_root()
+    except RuntimeError as e:
+        sys.exit(Color.red(f"Error: {e}"))
     print(Color.blue(f"Project root: {project_root}"))
 
-    # ----- Construct full source path (user provides full relative path) -----
-    src_dir = (project_root / args.source_dir).resolve()
+    # ----- Construct full source path relative to current working directory -----
+    src_dir = (Path.cwd() / args.source_dir).resolve()
     if not src_dir.is_dir():
         sys.exit(Color.red(f"Error: {src_dir} is not a directory or does not exist."))
 
+    # ----- Verify that the source directory is inside the project root -----
+    try:
+        src_dir.relative_to(project_root)
+    except ValueError:
+        sys.exit(Color.red(f"Error: {src_dir} is not inside the project root {project_root}."))
+
+    # ----- Check required files -----
     setting_path = src_dir / "setting.tex"
     main_path = src_dir / "main.tex"
     if not setting_path.is_file():
